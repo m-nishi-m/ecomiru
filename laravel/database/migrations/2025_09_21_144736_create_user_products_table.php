@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('user_products', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')
+            $table->foreignId('user_id')
                   ->constrained('users')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->comment('ユーザーID');
-            $table->foreign('product_id')
+            $table->foreignId('product_id')
                   ->constrained('products')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->comment('商品ID');
 
             $table->timestamps();

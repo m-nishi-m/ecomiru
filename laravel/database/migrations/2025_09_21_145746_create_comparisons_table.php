@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comparisons', function (Blueprint $table) {
             $table->id();
-            $table->foreigId('user_id')
+            $table->foreignId('user_id')
                   ->constrained('users')
                   ->comment('ユーザーID');
 

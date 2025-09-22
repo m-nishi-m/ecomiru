@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')
                   ->constrained('users')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->comment('ユーザーID');
             $table->foreignId('product_id')
                   ->constrained('products')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->comment('商品ID');
             $table->string('title')
                   ->nullable()

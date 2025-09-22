@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('review_id')
                   ->constrained('reviews')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->comment('レビューID');
             $table->foreignId('user_id')
                   ->constrained('users')
-                  ->onDelete('cascode')
+                  ->onDelete('cascade')
                   ->coment('ユーザーID');
             $table->string('type',50)
                   ->default('like')
