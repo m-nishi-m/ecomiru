@@ -1,8 +1,9 @@
 import { Inter } from 'next/font/google';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import theme from './theme/theme'
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { AuthProvider } from '@/context/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,13 +18,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-            <Box display="flex" flexDirection="column" minHeight="100vh">
-              <Header />
-              <Box p={2} maxWidth="960px" width="100%" margin="0 auto">
-                {children}
+            <AuthProvider>
+              <Box display="flex" flexDirection="column" minHeight="100vh">
+                <Header />
+                <Box p={2} maxWidth="960px" width="100%" margin="0 auto">
+                  {children}
+                </Box>
+                <Footer />
               </Box>
-              <Footer />
-            </Box>
+            </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
