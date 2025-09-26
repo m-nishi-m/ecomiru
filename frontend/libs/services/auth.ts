@@ -46,17 +46,13 @@ export const loginAuth = async ({
   password: string;
 }): Promise<{ token: string; user: { id: number; name: string; email: string } }> => {
   try {
-    const response = await axios.get('http://localhost:8000/api/login', {
-        params: { email, password }
-    });
+  const response = await axios.post('http://localhost:8000/api/login', { email, password });
 
-    const authHeader = response.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
-    if (!token) throw new Error('トークンがありません');
+  const token = response.data.token; // Authorization ヘッダーではなく body から取得
+  const user = response.data.user;
 
-    const user = response.data.user as { id: number; name: string; email: string };
-
-    return { token, user: user };
+  if (!token) throw new Error('トークンがありません');
+return { token, user };
   } catch (error) {
     console.error(error);
     throw new Error(extractApiErrorMessage(error, 'ログインに失敗しました'));
