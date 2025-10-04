@@ -52,7 +52,7 @@ export const loginAuth = async ({
   const user = response.data.user;
 
   if (!token) throw new Error('トークンがありません');
-return { token, user };
+  return { token, user };
   } catch (error) {
     console.error(error);
     throw new Error(extractApiErrorMessage(error, 'ログインに失敗しました'));
