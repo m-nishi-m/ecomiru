@@ -1,6 +1,7 @@
 'use client';
 
-import { loginAuth } from '@/libs/services/auth';
+import axios from 'axios';
+import { loginAuth, signUpAuth } from '@/libs/services/auth';
 import {
   getCurrentUser,
 } from '@/libs/services/user';
@@ -21,6 +22,7 @@ type AuthState = {
 type AuthActions = {
   login: (p: { email: string; password: string }) => Promise<void>;
   getAuthHeaders: () => Record<string, string>;
+  signUp: (p: { name: string; email: string; password: string; passwordConfirm: string }) => Promise<void>;
 };
 
 const AuthStateContext = createContext<AuthState | undefined>(undefined);
@@ -78,6 +80,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+    const signUp: AuthActions['signUp'] = async ({ name, email, password, passwordConfirm }) => {
+    setLoading(true);
+    try {
+      const { user, token } = await signUpAuth({ name, email, password, passwordConfirm }, { secure: false })
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      setUser(user);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getAuthHeaders = (): Record<string, string> => {
     const token = localStorage.getItem(TOKEN_KEY);
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -90,12 +104,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const actionsValue: AuthActions = {
     login,
     getAuthHeaders,
+    signUp,
   };
 
   return (
-    <AuthActionsContext value={actionsValue}>
-      <AuthStateContext value={stateValue}>{children}</AuthStateContext>
-    </AuthActionsContext>
+    <AuthActionsContext.Provider value={actionsValue}>
+      <AuthStateContext.Provider value={stateValue}>
+        {children}
+      </AuthStateContext.Provider>
+    </AuthActionsContext.Provider>
   );
 };
 

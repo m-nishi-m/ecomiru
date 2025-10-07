@@ -37,7 +37,7 @@ export const Login = (): React.JSX.Element => {
       <Typography
         variant="h4"
         component="p"
-        sx={{ fontWeight: 'bold', mt: 4, textAlign: 'center', color: '#AFE0D1' }}
+        sx={{ fontWeight: 'light', mt: 4, textAlign: 'center', color: '#AFE0D1' }}
       >
         えこみる
       </Typography>
