@@ -19,12 +19,12 @@ services:
 
   db:
     image: mysql:8.0.32
-    container_name: laravel_db
+    container_name: laravel_db_ecomiru
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel_db_ecomiru
+      MYSQL_DATABASE: laravel_db
       MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
     volumes:

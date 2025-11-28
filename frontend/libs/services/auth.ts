@@ -52,9 +52,34 @@ export const loginAuth = async ({
   const user = response.data.user;
 
   if (!token) throw new Error('トークンがありません');
-return { token, user };
+  return { token, user };
   } catch (error) {
     console.error(error);
     throw new Error(extractApiErrorMessage(error, 'ログインに失敗しました'));
+  }
+};
+
+export const signUpAuth = async ({
+  name,
+  email,
+  password,
+  passwordConfirm,
+} : {
+  name:string;
+  email: string;
+  password: string;
+  passwordConfirm:string;
+}):Promise<{ token: string; user: { id: number; name: string; email: string } }> => {
+  try {
+  const response = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/register', { name, email, password, password_confirmation: passwordConfirm });
+
+  const token = response.data.token; // Authorization ヘッダーではなく body から取得
+  const user = response.data.user;
+
+  if (!token) throw new Error('トークンがありません');
+  return { token, user };
+  } catch (error) {
+    console.error(error);
+    throw new Error(extractApiErrorMessage(error, '登録に失敗しました'));
   }
 };

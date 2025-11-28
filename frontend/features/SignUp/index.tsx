@@ -7,19 +7,21 @@ import { useState } from 'react';
 import { useAuthActions } from '@/context/AuthContext';
 
 type UserForm = {
+  name: string;
   email: string;
   password: string;
+  passwordConfirm: string;
 };
 
-export const Login = (): React.JSX.Element => {
+export const SignUp = (): React.JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const router = useRouter();
-  const { login } = useAuthActions();
-  const { register, handleSubmit, formState: { errors } } = useForm<UserForm>();
+  const { signUp } = useAuthActions();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<UserForm>();
 
   const onSubmit: SubmitHandler<UserForm> = async (data: UserForm) => {
     try {
-      await login(data);
+      await signUp(data);
       router.push('/mypage');
     } catch (error) {
       const message =
@@ -46,7 +48,7 @@ export const Login = (): React.JSX.Element => {
         component="p"
         sx={{ fontWeight: 'bold', mt: 4, textAlign: 'center' }}
       >
-        ログイン
+        新規登録
       </Typography>
 
       {errorMessage && (
@@ -61,6 +63,21 @@ export const Login = (): React.JSX.Element => {
           sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 5 }}
           onSubmit={handleSubmit(onSubmit)}
         >
+
+         <Box sx={{ mb: 2 }}>
+            <Typography>名前</Typography>
+            <TextField
+            fullWidth
+            variant="outlined"
+            {...register('name', {
+            required: '名前は必須です',
+            minLength: { value: 1, message: '名前は1文字以上で入力してください' },
+            maxLength: { value: 255, message: '名前は255文字以内で入力してください' },
+            })}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            />
+          </Box>
           <Box sx={{ mb: 2 }}>
             <Typography>メールアドレス</Typography>
             <TextField
@@ -91,6 +108,21 @@ export const Login = (): React.JSX.Element => {
               helperText={errors.password?.message}
             />
           </Box>
+        <Box sx={{ mb: 2 }}>
+        <Typography>パスワード確認用</Typography>
+        <TextField
+            type="password"
+            fullWidth
+            variant="outlined"
+            {...register('passwordConfirm', {
+            required: '確認用パスワードを入力してください',
+            validate: (value) =>
+                value === watch('password') || 'パスワードが一致しません',
+            })}
+            error={!!errors.passwordConfirm}
+            helperText={errors.passwordConfirm?.message}
+        />
+        </Box>
           <Box sx={{ my: 4 }}>
             <Button
               type="submit"
@@ -102,11 +134,8 @@ export const Login = (): React.JSX.Element => {
                 fontSize: 'large',
               }}
             >
-              ログイン
+              新規登録
             </Button>
-          </Box>
-          <Box sx={{ width: '100%', textAlign: 'center' }}>
-            <Link href="/password-reset">パスワードをお忘れの方はこちら</Link>
           </Box>
         </Box>
       </Box>
